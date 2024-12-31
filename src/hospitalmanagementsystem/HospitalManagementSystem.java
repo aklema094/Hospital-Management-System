@@ -83,7 +83,7 @@ public class HospitalManagementSystem {
 
             if (chackDoctorAvailability(doctorId, appointmentDate, connection)) {
 
-                String appQuery = "INSERT INTO appoinments(patient_id,doctor_id,appintment_date) VALUES(?,?,?)";
+                String appQuery = "INSERT INTO appoinments(patient_id,doctor_id,appointment_date) VALUES(?,?,?)";
                 try {
                     PreparedStatement pre = connection.prepareStatement(appQuery);
                     pre.setInt(1, patientId);

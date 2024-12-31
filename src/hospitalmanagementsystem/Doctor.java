@@ -48,14 +48,6 @@ public class Doctor {
             pre.setInt(1, dId);
             ResultSet resultSet = pre.executeQuery();
             if (resultSet.next()) {
-                System.out.println("+---------------+-------------------------+--------------------+");
-                System.out.println("| Doctor Id    | Name                    | Specialization     |");
-                System.out.println("+---------------+-------------------------+--------------------+");
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String specialization = resultSet.getString("specialization");
-                System.out.printf("|%-15s|%-25s|%-20s|\n", id, name, specialization);
-                System.out.println("+---------------+-------------------------+--------------------+");
                 return true;
             } else {
                 return false;
