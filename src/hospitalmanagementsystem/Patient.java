@@ -62,7 +62,7 @@ public class Patient {
             }
             System.out.println("+---------------+-------------------------+-----+----------+");  
        }catch(SQLException e){
-           System.out.println("failed to load"+e.getMessage());
+           System.out.println("Failed to load patients details"+e.getMessage());
            e.printStackTrace();
        }    
         
@@ -91,7 +91,7 @@ public class Patient {
              }
                    
          } catch (SQLException e){
-             System.out.println("failed to load "+e.getMessage());
+             System.out.println("Failed to load patient "+e.getMessage());
              e.printStackTrace();
              
          }  

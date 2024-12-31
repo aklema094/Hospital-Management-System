@@ -33,7 +33,7 @@ public class Doctor {
             }
             System.out.println("+---------------+-------------------------+--------------------+");
         } catch (SQLException e) {
-            System.out.println("failed to load" + e.getMessage());
+            System.out.println("Failed to load doctors details" + e.getMessage());
             e.printStackTrace();
         }
 
@@ -58,12 +58,11 @@ public class Doctor {
                 System.out.println("+---------------+-------------------------+--------------------+");
                 return true;
             } else {
-                System.out.println("Doctor id not found");
                 return false;
             }
 
         } catch (SQLException e) {
-            System.out.println("failed to load " + e.getMessage());
+            System.out.println("Failed to load doctor information " + e.getMessage());
             e.printStackTrace();
 
         }
