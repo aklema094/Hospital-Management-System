@@ -77,7 +77,7 @@ public class Patient {
              ResultSet resultSet = pre.executeQuery();
              if(resultSet.next()){
                  System.out.println("+---------------+-------------------------+-----+----------+");
-                 System.out.println("| Patients Id   | Name                    | Age | Gender   |");
+                 System.out.println("| Patient Id   | Name                    | Age | Gender   |");
                  System.out.println("+---------------+-------------------------+-----+----------+");
                  int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");

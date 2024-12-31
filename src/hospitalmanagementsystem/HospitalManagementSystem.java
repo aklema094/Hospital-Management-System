@@ -20,7 +20,8 @@ public class HospitalManagementSystem {
         try(Connection connection = DriverManager.getConnection(url,user,password)){
             Patient patient = new Patient(connection,scanner);
             Doctor doctor = new Doctor(connection,scanner);
-            doctor.viewDoctors();
+            //doctor.viewDoctors();
+            doctor.getDoctorById(3);
             
             //patient.addPatient();
             //patient.viewPatients();
