@@ -1,12 +1,13 @@
 package hospitalmanagementsystem;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.Scanner;
 
 public class Patient {
-
     private Connection connection;
     private Scanner scanner;
 
@@ -42,7 +43,29 @@ public class Patient {
             e.printStackTrace();
 
         }
-
+    }
+    // view patients
+    public void viewPatients(){
+       try{
+            String query = "select * from patients";
+            PreparedStatement pre = connection.prepareStatement(query);
+            ResultSet resultSet = pre.executeQuery();
+            System.out.println("+---------------+-------------------------+-----+----------+");
+            System.out.println("| Patients Id   | Name                    | Age | Gender   |");
+            System.out.println("+---------------+-------------------------+-----+----------+");
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int age = resultSet.getInt("age");
+                String gender = resultSet.getString("gender");
+                System.out.printf("|%-15s|%-25s|%-5d|%-10s|\n", id, name, age, gender);      
+            }
+            System.out.println("+---------------+-------------------------+-----+----------+");  
+       }catch(SQLException e){
+           System.out.println("failed to load"+e.getMessage());
+           e.printStackTrace();
+       }    
+        
     }
 
 }
