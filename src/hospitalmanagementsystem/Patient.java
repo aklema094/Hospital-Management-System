@@ -67,5 +67,39 @@ public class Patient {
        }    
         
     }
+    // chack patient details
+    public boolean getPatientById(int Pid){
+        
+         String Query = "SELECT * FROM patients WHERE id =?";
+         try{
+             PreparedStatement pre = connection.prepareStatement(Query);
+             pre.setInt(1, Pid);
+             ResultSet resultSet = pre.executeQuery();
+             if(resultSet.next()){
+                 System.out.println("+---------------+-------------------------+-----+----------+");
+                 System.out.println("| Patients Id   | Name                    | Age | Gender   |");
+                 System.out.println("+---------------+-------------------------+-----+----------+");
+                 int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int age = resultSet.getInt("age");
+                String gender = resultSet.getString("gender");
+                System.out.printf("|%-15s|%-25s|%-5d|%-10s|\n", id, name, age, gender);  
+                System.out.println("+---------------+-------------------------+-----+----------+");
+                return true;
+             }else{
+                 System.out.println("Patient Id not Exit");
+                 return false;
+             }
+                   
+         } catch (SQLException e){
+             System.out.println("faild to load"+e.getMessage());
+             e.printStackTrace();
+             
+         }
+         
+         return false;
+        
+    }
+    
 
 }
