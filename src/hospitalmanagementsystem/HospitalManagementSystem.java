@@ -1,34 +1,33 @@
-
 package hospitalmanagementsystem;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.Scanner;
 
-
-
 public class HospitalManagementSystem {
-     private static final String url = "jdbc:mysql://localhost:3306/hospital";
-       private static final String user = "root";
-        private static final String password = "29344";
-        
+
+    private static final String url = "jdbc:mysql://localhost:3306/hospital";
+    private static final String user = "root";
+    private static final String password = "29344";
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-        }catch(ClassNotFoundException e){
-            System.out.println("Failed to load driver"+e.getMessage());
-            e.printStackTrace();          
+        } catch (ClassNotFoundException e) {
+            System.out.println("Failed to load driver" + e.getMessage());
+            e.printStackTrace();
         }
-        
-       
-        
-        try(Connection connection = DriverManager.getConnection(url,user,password)){
-            Patient patient = new Patient(connection,scanner);
-            Doctor doctor = new Doctor(connection,scanner);
-            while(true){
-                System.out.println("              HOSPITAL MANAGEMENT SYSTEM"                );
+
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Patient patient = new Patient(connection, scanner);
+            Doctor doctor = new Doctor(connection, scanner);
+            while (true) {
+                System.out.println("              HOSPITAL MANAGEMENT SYSTEM");
                 System.out.println("--------------------------------------------------------");
                 System.out.println("1. Add Patient");
                 System.out.println("2. View Patients");
@@ -38,32 +37,100 @@ public class HospitalManagementSystem {
                 System.out.print("Enter your choice : ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
-                switch(choice){
+                switch (choice) {
                     case 1:// add patient
                         patient.addPatient();
+                        System.out.println("");
                         break;
                     case 2: // view patients
                         patient.viewPatients();
+                        System.out.println("");
                         break;
                     case 3: // view Doctors
                         doctor.viewDoctors();
+                        System.out.println("");
                         break;
                     case 4: // Book Appointment
+                        bookAppointment(patient, doctor, connection, scanner);
+                        System.out.println("");
                         break;
-                    case 5 :
-                        System.out.println("Thank you to use our service");
+                    case 5:
+                        System.out.println("Thank you for use our service");
+                        System.out.println("");
                         return;
                     default:
-                        System.out.println("Enter valid choice!! Try again");    
-                        
+                        System.out.println("Enter valid choice!! Try again");
+
                 }
             }
-        }catch(SQLException e){
-            System.err.println("Database connection failed"+e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Database connection failed" + e.getMessage());
             e.printStackTrace();
         }
-   
+
     }
-    
-    
+
+    public static void bookAppointment(Patient patient, Doctor doctor, Connection connection, Scanner scanner) {
+
+        System.out.print("Enter Patient Id : ");
+        int patientId = scanner.nextInt();
+        System.out.print("Enter Doctor Id : ");
+        int doctorId = scanner.nextInt();
+        System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+        String appointmentDate = scanner.next();
+
+        if (patient.getPatientById(patientId) && doctor.getDoctorById(doctorId)) {
+
+            if (chackDoctorAvailability(doctorId, appointmentDate, connection)) {
+
+                String appQuery = "INSERT INTO appoinments(patient_id,doctor_id,appintment_date) VALUES(?,?,?)";
+                try {
+                    PreparedStatement pre = connection.prepareStatement(appQuery);
+                    pre.setInt(1, patientId);
+                    pre.setInt(2, doctorId);
+                    pre.setString(3, appointmentDate);
+                    int affectedRows = pre.executeUpdate();
+                    if(affectedRows>0){
+                          System.out.println("Appointment Booked Successfully");
+                    }else{
+                        System.out.println("Failed to booked appointment");
+                    }
+                   
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                System.out.println("Doctor is not available on this date!! Please, Try again with new date");
+            }
+
+        } else {
+            System.out.println("Enter valid doctor and patient Id");
+        }
+
+    }
+
+    public static boolean chackDoctorAvailability(int dId, String date, Connection connection) {
+
+        String Query = "SELECT COUNT(*) FROM appoinments WHERE doctor_id = ? AND appointment_date = ?";
+        try {
+            PreparedStatement pre = connection.prepareStatement(Query);
+            pre.setInt(1, dId);
+            pre.setString(2, date);
+            ResultSet resultSet = pre.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                if (count == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
