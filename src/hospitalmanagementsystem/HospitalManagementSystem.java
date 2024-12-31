@@ -19,12 +19,18 @@ public class HospitalManagementSystem {
         
         try(Connection connection = DriverManager.getConnection(url,user,password)){
             Patient patient = new Patient(connection,scanner);
-            patient.addPatient();
+            Doctor doctor = new Doctor(connection,scanner);
+            doctor.viewDoctors();
+            
+            //patient.addPatient();
+            //patient.viewPatients();
+            //patient.getPatientById(10);
         }catch(SQLException e){
             System.err.println("Database connection failed"+e.getMessage());
             e.printStackTrace();
         }
    
     }
+    
     
 }

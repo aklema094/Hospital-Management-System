@@ -67,7 +67,7 @@ public class Patient {
        }    
         
     }
-    // chack patient details
+    // check patient details
     public boolean getPatientById(int Pid){
         
          String Query = "SELECT * FROM patients WHERE id =?";
@@ -87,16 +87,14 @@ public class Patient {
                 System.out.println("+---------------+-------------------------+-----+----------+");
                 return true;
              }else{
-                 System.out.println("Patient Id not Exit");
                  return false;
              }
                    
          } catch (SQLException e){
-             System.out.println("faild to load"+e.getMessage());
+             System.out.println("failed to load "+e.getMessage());
              e.printStackTrace();
              
-         }
-         
+         }  
          return false;
         
     }
